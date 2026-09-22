@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Selamat Ulang Tahun Bokem</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Dancing+Script:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tone.js for Audio Synthesis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+    <!-- Canvas Confetti for Animations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --color-bg-start: #040814; 
+            --color-bg-mid: #0a1931;   
+            --color-bg-end: #150e56;   
+            --color-accent: #FFD700;   
+            --color-accent-glow: rgba(255, 215, 0, 0.6);
+            --color-text-main: #ffffff;
+            --color-text-muted: #b0c4de;
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Poppins', sans-serif;
+            --font-handwriting: 'Caveat', cursive;
+            
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            
+            --sat: env(safe-area-inset-top);
+            --sab: env(safe-area-inset-bottom);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-body); 
+            color: var(--color-text-main);
+            background: linear-gradient(135deg, var(--color-bg-start), var(--color-bg-mid), var(--color-bg-end));
+            background-size: 300% 300%; 
+            animation: gradientMove 20s ease infinite;
+            min-height: 100vh;
+            min-height: 100dvh; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth;
+            padding-top: var(--sat);
+            padding-bottom: var(--sab);
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; }
+        p { line-height: 1.6; }
+
+        .container {
+            width: 100%;
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 1rem 0.75rem; 
+            position: relative; 
+            z-index: 10;
+            box-sizing: border-box;
+        }
+
+        @media (min-width: 640px) {
+            .container { padding: 2rem; }
+        }
+
+        .glass-card {
+            background: var(--glass-bg); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px); 
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.2); 
+            border-left: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px; 
+            box-shadow: var(--glass-shadow); 
+            padding: 1rem;
+            transform-style: preserve-3d; 
+            will-change: transform;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        @media (min-width: 640px) {
+            .glass-card { border-radius: 24px; padding: 2.5rem; }
+        }
+
+        /* Modals & Inputs */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            height: 100dvh;
+            background: rgba(4, 8, 20, 0.92); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: center; align-items: center; z-index: 2000;
+            transition: opacity 0.4s ease, visibility 0.4s ease; padding: 1rem; overflow-y: auto;
+        }
+        .modal-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .modal-content {
+            text-align: center; max-width: 520px; width: 100%; transform: translateY(0) scale(1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 90vh; max-height: 90dvh; overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal-overlay.hidden .modal-content { transform: translateY(50px) scale(0.9); }
+
+        input[type="text"], input[type="file"], select {
+            width: 100%; padding: 12px 18px; margin: 0.8rem 0; border: 2px solid var(--glass-border);
+            border-radius: 40px; background: rgba(255,255,255,0.07); color: #fff;
+            font-family: var(--font-body); font-size: 0.95rem; outline: none; text-align: center;
+            transition: all 0.3s ease; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            touch-action: manipulation;
+        }
+        @media (min-width: 640px) {
+            input[type="text"], input[type="file"], select { padding: 14px 22px; margin: 1rem 0; font-size: 1rem; }
+        }
+        input[type="text"]:focus, select:focus { border-color: var(--color-accent); background: rgba(255,255,255,0.12); }
+
+        .btn {
+            background: transparent; color: var(--color-accent); border: 2px solid var(--color-accent);
+            padding: 10px 22px; border-radius: 40px; font-family: var(--font-body); font-size: 0.9rem;
+            font-weight: 600; transition: all 0.3s ease;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            position: relative; overflow: hidden; z-index: 10; cursor: pointer;
+            min-height: 44px; touch-action: manipulation; user-select: none;
+        }
+        @media (min-width: 640px) {
+            .btn { padding: 12px 28px; font-size: 0.95rem; }
+        }
+        .btn:hover { background: var(--color-accent); color: var(--color-bg-start); box-shadow: 0 0 25px var(--color-accent-glow); }
+        .btn:active { transform: scale(0.96); }
+        .btn-solid { background: var(--color-accent); color: var(--color-bg-start); border-color: var(--color-accent); }
+        .btn-solid:hover { background: #ffffff; color: #000000; border-color: #ffffff; box-shadow: 0 0 25px rgba(255,255,255,0.6); }
+
+        #main-app { opacity: 0; transition: opacity 1.5s ease-in; display: none; }
+        #main-app.visible { opacity: 1; display: block; }
+
+        .music-controller { position: fixed; bottom: 20px; right: 20px; z-index: 100; }
+        @media (min-width: 640px) {
+            .music-controller { bottom: 30px; right: 30px; }
+        }
+        .music-btn {
+            width: 50px; height: 50px; border-radius: 50%; background: var(--glass-bg);
+            border: 1px solid rgba(255,215,0,0.3); backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--color-accent); font-size: 1.3rem; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); animation: pulseGlow 2s infinite; cursor: pointer;
+            touch-action: manipulation;
+        }
+        @media (min-width: 640px) {
+            .music-btn { width: 60px; height: 60px; font-size: 1.5rem; }
+        }
+        .music-btn:hover { transform: scale(1.1) rotate(10deg); background: rgba(255,255,255,0.1); }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+
+        /* Hero & Cake Section */
+        .hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding-top: 20px; }
+        .greeting-card { max-width: 880px; width: 100%; padding: 2rem 1.25rem; }
+        @media (min-width: 640px) {
+            .greeting-card { padding: 3.5rem 2.5rem; }
+        }
+        .greeting-title { 
+            font-size: clamp(1.6rem, 5vw, 3rem); 
+            color: #fff; 
+            margin-bottom: 0.8rem; 
+            letter-spacing: 1px; 
+        }
+        .greeting-title span { 
+            display: block; 
+            font-size: clamp(2.5rem, 9vw, 4.8rem); 
+            color: var(--color-accent); 
+            text-shadow: 0 0 30px var(--color-accent-glow); 
+            font-family: var(--font-heading); 
+            font-style: italic; 
+            margin-top: 5px;
+        }
+
+        /* Voice Note Card */
+        .voice-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 16px; padding: 1.2rem; margin-top: 1.5rem; text-align: left;
+            box-shadow: inset 0 0 15px rgba(255,215,0,0.05); position: relative;
+        }
+        @media (min-width: 640px) {
+            .voice-card { border-radius: 20px; padding: 1.5rem; margin-top: 2rem; }
+        }
+        .voice-player {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;
+            background: rgba(0,0,0,0.3); padding: 10px 15px; border-radius: 40px;
+        }
+        @media (min-width: 640px) {
+            .voice-player { gap: 15px; padding: 12px 20px; margin-bottom: 1rem; }
+        }
+        .voice-play-btn {
+            width: 40px; height: 40px; border-radius: 50%; background: var(--color-accent);
+            color: var(--color-bg-start); border: none; display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; cursor: pointer; transition: transform 0.2s; flex-shrink: 0;
+            touch-action: manipulation;
+        }
+        @media (min-width: 640px) {
+            .voice-play-btn { width: 45px; height: 45px; font-size: 1.1rem; }
+        }
+        .voice-play-btn:hover { transform: scale(1.08); }
+        .voice-waveform {
+            flex-grow: 1; height: 24px; display: flex; align-items: center; gap: 2px; overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            .voice-waveform { gap: 3px; }
+        }
+        .voice-bar {
+            width: 3px; height: 30%; background: rgba(255,215,0,0.4); border-radius: 2px; transition: height 0.2s ease; flex-shrink: 0;
+        }
+        .voice-card.playing .voice-bar {
+            animation: waveAnim 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes waveAnim { 0% { height: 20%; } 100% { height: 95%; } }
+
+        /* Video Card Section */
+        .video-card {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,215,0,0.2);
+            border-radius: 16px; padding: 1.2rem; margin-top: 1.5rem; text-align: left;
+            box-shadow: inset 0 0 15px rgba(255,215,0,0.05); position: relative;
+        }
+        @media (min-width: 640px) {
+            .video-card { border-radius: 20px; padding: 1.5rem; margin-top: 2rem; }
+        }
+        .greeting-video-wrapper {
+            position: relative; width: 100%; border-radius: 12px; overflow: hidden;
+            background: #000; aspect-ratio: 16/9; max-height: 380px;
+            border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
+        .greeting-video-wrapper video {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
+        .video-center-play-btn {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 60px; height: 60px; border-radius: 50%; background: var(--color-accent);
+            color: var(--color-bg-start); border: 2px solid #ffffff; font-size: 1.4rem;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            box-shadow: 0 0 25px var(--color-accent-glow), 0 5px 15px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 5;
+            padding-left: 3px; touch-action: manipulation;
+        }
+        @media (min-width: 640px) {
+            .video-center-play-btn { width: 70px; height: 70px; font-size: 1.7rem; padding-left: 4px; }
+        }
+        .video-center-play-btn:hover { transform: translate(-50%, -50%) scale(1.12); background: #ffffff; color: #000000; }
+        .greeting-video-wrapper.is-playing .video-center-play-btn { opacity: 0; pointer-events: none; }
+        .greeting-video-wrapper.is-playing:hover .video-center-play-btn { opacity: 0.9; pointer-events: auto; padding-left: 0; }
+        .video-controls-bar {
+            margin-top: 0.8rem; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+        }
+
+        .cake-section { padding: 3rem 0 2rem; text-align: center; }
+        @media (min-width: 640px) { .cake-section { padding: 5rem 0 2rem; } }
+        .section-title { font-size: clamp(2rem, 6vw, 2.8rem); color: var(--color-accent); margin-bottom: 0.5rem; text-shadow: 0 0 15px var(--color-accent-glow); }
+        
+        .cake-container { display: flex; flex-direction: column; align-items: center; margin-top: 3.5rem; position: relative; }
+        .cake {
+            position: relative; width: 200px; height: 100px;
+            background: linear-gradient(to right, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            border-radius: 10px 10px 0 0; box-shadow: inset 0 -20px rgba(0,0,0,0.1), 0 10px 20px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        @media (min-width: 640px) {
+            .cake { width: 250px; height: 120px; }
+        }
+        .cake::before {
+            content: ''; position: absolute; bottom: -20px; left: -25px; width: 250px; height: 35px;
+            background: rgba(255,255,255,0.2); border-radius: 50%; border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.5); z-index: -1;
+        }
+        @media (min-width: 640px) {
+            .cake::before { left: -35px; width: 320px; height: 40px; }
+        }
+        .cake::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 25px;
+            background: #fff; border-radius: 10px 10px 15px 15px; box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .candle-container { position: absolute; top: -45px; left: 50%; transform: translateX(-50%); display: flex; gap: 15px; }
+        @media (min-width: 640px) { .candle-container { gap: 20px; } }
+        .candle {
+            width: 12px; height: 45px; background: repeating-linear-gradient(45deg, #fff, #fff 5px, #ff4757 5px, #ff4757 10px);
+            border-radius: 3px; position: relative; box-shadow: inset -3px 0 5px rgba(0,0,0,0.1);
+        }
+        @media (min-width: 640px) { .candle { width: 15px; height: 50px; } }
+        .flame {
+            position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 13px; height: 22px;
+            background: #FFD700; border-radius: 50% 50% 20% 20%; box-shadow: 0 0 15px #FFD700, 0 0 30px #ff6b6b;
+            animation: flicker 0.5s infinite alternate; transition: opacity 0.5s ease;
+        }
+        @keyframes flicker {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scale(1.1); opacity: 1; box-shadow: 0 0 20px #FFD700, 0 0 40px #ff6b6b; }
+        }
+        .smoke { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; opacity: 0; }
+        .blown-out .flame { opacity: 0; }
+        .blown-out .smoke { animation: flyUp 1.5s ease-out forwards; }
+        @keyframes flyUp { 0% { opacity: 1; transform: translate(-50%, 0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50px) scale(3); } }
+
+        /* Photo Studio & Camera Layout */
+        .photo-studio { padding: 2.5rem 0; text-align: center; width: 100%; max-width: 100%; overflow: hidden; }
+        @media (min-width: 640px) { .photo-studio { padding: 4rem 0; } }
+        
+        .studio-grid { 
+            display: grid; 
+            grid-template-columns: 1fr; 
+            gap: 1.25rem; 
+            align-items: start; 
+            margin-top: 1.25rem; 
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+        @media (min-width: 900px) { .studio-grid { grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; } }
+        
+        .webcam-container, .gallery-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 0.8rem; 
+            padding: 1rem; 
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        @media (min-width: 640px) { .webcam-container, .gallery-container { gap: 1.5rem; padding: 2.2rem; } }
+        
+        .video-wrapper {
+            position: relative; 
+            width: 100%; 
+            max-width: 100%;
+            border-radius: 14px; 
+            overflow: hidden; 
+            background: #000;
+            aspect-ratio: 16/9; 
+            max-height: 200px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        @media (min-width: 640px) {
+            .video-wrapper { max-height: 240px; }
+        }
+        #webcam { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); transition: filter 0.3s ease; }
+        
+        /* Filter Section */
+        .filter-section-title { text-align: left; font-size: 0.8rem; color: var(--color-accent); font-weight: 600; margin-top: 4px; margin-bottom: 2px; width: 100%; }
+        .filter-pills {
+            display: flex; 
+            gap: 6px; 
+            overflow-x: auto; 
+            padding: 4px 2px 8px 2px;
+            scroll-behavior: smooth; 
+            -webkit-overflow-scrolling: touch; 
+            overscroll-behavior-x: contain;
+            width: 100%;
+            max-width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+            flex-shrink: 1;
+        }
+        .filter-pills::-webkit-scrollbar { height: 3px; }
+        .filter-pills::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        
+        .filter-btn {
+            flex: 0 0 auto; 
+            padding: 5px 10px; 
+            border-radius: 20px; 
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border); 
+            color: #fff; 
+            font-size: 0.75rem; 
+            font-weight: 500;
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px;
+            touch-action: manipulation;
+            white-space: nowrap;
+        }
+        @media (min-width: 640px) {
+            .filter-btn { padding: 8px 16px; font-size: 0.85rem; }
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--color-accent); color: var(--color-bg-start); border-color: var(--color-accent);
+            box-shadow: 0 0 15px var(--color-accent-glow); font-weight: 600;
+        }
+
+        /* Filter Presets */
+        .filter-normal { filter: none !important; }
+        .filter-sepia { filter: sepia(0.65) contrast(1.1) brightness(0.95) saturate(1.2) !important; }
+        .filter-bw { filter: grayscale(1) contrast(1.25) brightness(1.05) !important; }
+        .filter-vintage { filter: sepia(0.35) contrast(1.15) brightness(0.9) saturate(1.4) hue-rotate(-10deg) !important; }
+        .filter-warm { filter: saturate(1.6) contrast(1.1) brightness(1.05) hue-rotate(-15deg) !important; }
+        .filter-cyber { filter: contrast(1.35) hue-rotate(180deg) saturate(1.8) brightness(1.1) !important; }
+        .filter-soft { filter: brightness(1.1) contrast(0.9) saturate(0.85) sepia(0.15) !important; }
+        .filter-pink { filter: hue-rotate(300deg) saturate(1.5) brightness(1.05) contrast(1.1) !important; }
+
+        .file-upload-wrapper { position: relative; margin: 0.4rem 0; width: 100%; max-width: 100%; box-sizing: border-box; }
+        .file-upload-wrapper input[type="file"] {
+            position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+        }
+        .file-upload-display {
+            padding: 8px 12px; 
+            border: 2px dashed var(--glass-border); 
+            border-radius: 40px;
+            background: rgba(255,255,255,0.05); 
+            color: var(--color-text-muted); 
+            pointer-events: none;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 6px; 
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .file-upload-wrapper:hover .file-upload-display { border-color: var(--color-accent); color: var(--color-accent); }
+
+        .album-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 0.8rem; }
+        @media (min-width: 640px) {
+            .album-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-top: 1rem; }
+        }
+        .memory-card {
+            background: var(--glass-bg); padding: 6px; border-radius: 12px; border: 1px solid var(--glass-border);
+            text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; cursor: pointer; overflow: hidden; touch-action: manipulation;
+        }
+        @media (min-width: 640px) { .memory-card { padding: 8px; border-radius: 16px; } }
+        .memory-card:hover { transform: scale(1.05) rotate(1deg); z-index: 10; border-color: var(--color-accent); }
+        .memory-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; display: block; }
+
+        /* Polaroid Customizer Modal */
+        .polaroid-customizer { display: flex; flex-direction: column; gap: 1rem; width: 100%; margin-top: 0.8rem; }
+        .polaroid-theme-selector { 
+            display: flex; gap: 8px; overflow-x: auto; padding: 6px 2px 10px 2px; width: 100%; 
+            scroll-behavior: smooth; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+        }
+        .polaroid-theme-selector::-webkit-scrollbar { height: 4px; }
+        .polaroid-theme-selector::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        
+        .theme-pill {
+            flex: 0 0 auto; padding: 8px 14px; border-radius: 20px; background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border); color: #fff; font-size: 0.8rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+            touch-action: manipulation;
+        }
+        .theme-pill.active, .theme-pill:hover {
+            background: var(--color-accent); color: var(--color-bg-start); font-weight: 600;
+            box-shadow: 0 0 15px var(--color-accent-glow); border-color: var(--color-accent);
+        }
+
+        .polaroid-wrapper {
+            position: relative; width: 100%; max-width: 300px; margin: 0 auto;
+            padding: 12px 12px 38px 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            transition: all 0.4s ease; border-radius: 4px; transform: rotate(-1deg);
+        }
+        @media (min-width: 640px) {
+            .polaroid-wrapper { max-width: 340px; padding: 16px 16px 45px 16px; transform: rotate(-1.5deg); }
+        }
+        .polaroid-wrapper img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 2px; display: block; }
+        .polaroid-caption {
+            font-family: var(--font-handwriting); font-size: 1.5rem; margin-top: 10px; text-align: center;
+            font-weight: 700; line-height: 1.1; word-break: break-word; min-height: 30px;
+        }
+        @media (min-width: 640px) {
+            .polaroid-caption { font-size: 1.9rem; margin-top: 14px; min-height: 36px; }
+        }
+
+        /* Polaroid Themes */
+        .theme-classic { background: #ffffff; color: #222; border: 1px solid #e2e8f0; }
+        .theme-classic .polaroid-caption { font-family: 'Caveat', cursive; color: #2d3748; }
+
+        .theme-vintage { background: #f4ecd8; color: #4a3b2c; border: 1px solid #d4c5a9; }
+        .theme-vintage .polaroid-caption { font-family: 'Dancing Script', cursive; color: #3d2b1f; }
+
+        .theme-pastel { background: #ffe3ec; color: #5c3d46; border: 1px solid #fecdd3; }
+        .theme-pastel .polaroid-caption { font-family: 'Pacifico', cursive; color: #9f1239; font-size: 1.2rem; }
+
+        .theme-midnight { background: #111827; color: #38bdf8; border: 2px solid #38bdf8; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+        .theme-midnight .polaroid-caption { font-family: 'Poppins', sans-serif; color: #f472b6; font-weight: 600; font-size: 1.1rem; }
+
+        .theme-gold { background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7); color: #332200; border: 1px solid #d4af37; }
+        .theme-gold .polaroid-caption { font-family: 'Playfair Display', serif; color: #3e2723; font-weight: 700; font-size: 1.1rem; }
+
+        .theme-film { background: #09090b; color: #fff; padding-top: 26px; border: 1px solid #27272a; }
+        .theme-film .polaroid-caption { font-family: 'Courier New', monospace; color: #facc15; font-size: 1.05rem; }
+
+        .theme-party { background: #ffffff; color: #111; border: 3px dashed #f43f5e; }
+        .theme-party .polaroid-caption { font-family: 'Caveat', cursive; color: #e11d48; font-size: 1.7rem; }
+
+        .theme-tape { background: #faf8f5; color: #222; border: 1px solid #e5e5e5; }
+        .theme-tape .polaroid-caption { font-family: 'Caveat', cursive; color: #1e293b; }
+
+        /* Puzzle Game Section Styles */
+        .puzzle-section { padding: 3rem 0; text-align: center; }
+        @media (min-width: 640px) { .puzzle-section { padding: 4rem 0; } }
+
+        .puzzle-level-selector {
+            display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem;
+        }
+        .level-btn {
+            padding: 8px 16px; border-radius: 20px; background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border); color: #fff; font-size: 0.85rem; font-weight: 500;
+            cursor: pointer; transition: all 0.3s ease; touch-action: manipulation;
+        }
+        .level-btn.active, .level-btn:hover {
+            background: var(--color-accent); color: var(--color-bg-start); font-weight: 600;
+            box-shadow: 0 0 15px var(--color-accent-glow); border-color: var(--color-accent);
+        }
+
+        .puzzle-container {
+            width: 100%; max-width: 480px; margin: 0 auto; background: rgba(0,0,0,0.4);
+            border: 2px solid var(--glass-border); border-radius: 20px; padding: 1rem;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center;
+            overflow: hidden;
+        }
+
+        .puzzle-stats-bar {
+            width: 100%; display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 1rem; font-size: 0.85rem; font-weight: 600; color: var(--color-accent);
+        }
+
+        .puzzle-board {
+            width: 100%; max-width: 100%; display: grid; gap: 2px;
+            background: rgba(255,255,255,0.1); padding: 4px; border-radius: 12px;
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            touch-action: manipulation; user-select: none;
+            overflow: hidden; box-sizing: border-box;
+        }
+
+        .puzzle-piece {
+            width: 100%; height: 100%; aspect-ratio: 1; border-radius: 3px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+            touch-action: manipulation; background-repeat: no-repeat; box-sizing: border-box;
+        }
+        .puzzle-piece.selected {
+            border: 2px solid var(--color-accent); transform: scale(0.92);
+            box-shadow: 0 0 12px var(--color-accent); z-index: 5;
+        }
+        .puzzle-piece.correct {
+            border-color: rgba(72, 187, 120, 0.6);
+        }
+
+        .puzzle-controls {
+            display: flex; gap: 8px; margin-top: 1.2rem; flex-wrap: wrap; justify-content: center; width: 100%;
+        }
+
+        .puzzle-preview-box {
+            display: none; position: relative; width: 100%; max-width: 220px; margin-top: 1rem;
+            border-radius: 12px; overflow: hidden; border: 2px solid var(--color-accent);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
+        .puzzle-preview-box img { width: 100%; display: block; }
+
+        /* Bonus Config Form */
+        .bonus-config-card {
+            width: 100%; max-width: 480px; margin: 1rem auto 0 auto; text-align: left;
+            background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 16px;
+            border: 1px solid var(--glass-border); display: none;
+        }
+        .bonus-config-card.show { display: block; }
+
+        /* Game Section */
+        .game-section { padding: 3rem 0; text-align: center; }
+        @media (min-width: 640px) { .game-section { padding: 4rem 0; } }
+        .game-container {
+            width: 100%; max-width: 800px; margin: 0 auto; background: rgba(0,0,0,0.4);
+            border: 2px solid var(--glass-border); border-radius: 16px; overflow: hidden; position: relative;
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+            touch-action: none;
+        }
+        @media (min-width: 640px) { .game-container { border-radius: 20px; } }
+        #game-canvas { display: block; width: 100%; height: 320px; touch-action: none; cursor: crosshair;}
+        @media (min-width: 640px) { #game-canvas { height: 400px; } }
+        .game-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(4,8,20,0.88); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 10; backdrop-filter: blur(5px);
+            padding: 1rem;
+        }
+        .game-stats {
+            position: absolute; top: 12px; left: 15px; right: 15px; display: flex;
+            justify-content: space-between; font-size: 1rem; font-weight: bold; pointer-events: none;
+            z-index: 5;
+        }
+        @media (min-width: 640px) { .game-stats { top: 15px; left: 20px; right: 20px; font-size: 1.2rem; } }
+        .lives { color: #ff4757; } .score { color: var(--color-accent); }
+        .game-overlay.hidden { display: none !important; }
+
+        /* Wishing Wall */
+        .wishing-wall { padding: 3rem 0; text-align: center; }
+        @media (min-width: 640px) { .wishing-wall { padding: 5rem 0; } }
+        .wish-form { 
+            display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; 
+            margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; 
+            width: 100%;
+        }
+        .wish-form input { flex: 1 1 200px; margin: 0; }
+        .wish-form button { flex: 0 0 auto; }
+        
+        .wall-grid { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; padding: 10px; min-height: 180px; }
+        @media (min-width: 640px) { .wall-grid { gap: 20px; padding: 20px; min-height: 200px; } }
+        .sticky-note {
+            width: 100%; max-width: 210px; min-height: 180px; padding: 20px 15px; background: #ffeb3b; color: #333;
+            box-shadow: 3px 5px 15px rgba(0,0,0,0.3); font-family: var(--font-handwriting); font-size: 1.3rem;
+            position: relative; display: flex; flex-direction: column; justify-content: center; transition: transform 0.3s;
+            border-radius: 2px;
+        }
+        @media (min-width: 640px) {
+            .sticky-note { min-height: 220px; padding: 25px 20px; font-size: 1.5rem; }
+        }
+        .sticky-note::before {
+            content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 40px; height: 20px;
+            background: rgba(255,255,255,0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.2); border-radius: 2px;
+        }
+        .sticky-note:hover { transform: scale(1.05) rotate(-2deg); z-index: 5; }
+        .note-author { margin-top: 12px; font-size: 1rem; text-align: right; font-weight: bold; color: #555; }
+
+        .animate-up { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .animate-up.in-view { opacity: 1; transform: translateY(0); }
+
+        #toast-container { 
+            position: fixed; top: 15px; left: 50%; transform: translateX(-50%); 
+            z-index: 9999; display: flex; flex-direction: column; gap: 8px; 
+            pointer-events: none; width: 90%; max-width: 400px;
+        }
+        .toast {
+            background: rgba(10, 25, 49, 0.96); backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border-left: 4px solid var(--color-accent); color: #fff; padding: 12px 20px; 
+            border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            opacity: 0; transform: translateY(-20px); transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex; align-items: center; gap: 10px; pointer-events: auto; word-break: break-word;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+
+        .floating-bubble, .floating-heart { position: fixed; bottom: -50px; z-index: 0; pointer-events: none; animation: floatUp linear infinite; }
+        .floating-bubble { border-radius: 50%; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.1); }
+        .floating-heart { color: rgba(255, 105, 180, 0.4); font-size: 1.8rem; animation: floatUp linear infinite, sway 3s ease-in-out infinite alternate; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-120vh) scale(1.5); opacity: 0; } }
+        @keyframes sway { 0% { margin-left: -20px; } 100% { margin-left: 20px; } }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="modal-overlay">
+        <div class="glass-card modal-content">
+            <i class="fa-solid fa-crown" style="font-size: 2.5rem; color: var(--color-accent); margin-bottom: 0.8rem;"></i>
+            <h1 style="font-size: 1.8rem;">Alloooww</h1>
+            <p style="color: var(--color-text-muted); font-size: 0.95rem;">Ini siapa nyaakk? Isi namanya dongg &gt;&lt; </p>
+            <input type="text" id="guest-name" placeholder="Masukin namanyaa yaa wahaii bokem..." autocomplete="off">
+            <button class="btn btn-solid" id="enter-btn" style="margin-top: 0.5rem; width: 100%;">
+                Lesgooww... <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Polaroid Generator Modal -->
+    <div id="polaroid-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content" style="max-width: 480px; padding: 1.5rem 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                <h2 style="color:var(--color-accent); font-size: 1.3rem;"><i class="fa-solid fa-wand-magic-sparkles"></i> Studio Polaroid</h2>
+                <button id="btn-close-polaroid-top" style="background:none; border:none; color:#fff; font-size: 1.3rem; cursor:pointer; padding: 5px;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="polaroid-wrapper theme-classic" id="polaroid-render-area">
+                <img id="polaroid-img-target" src="" alt="Polaroid View">
+                <p class="polaroid-caption" id="polaroid-caption-text">Happy Birthday!</p>
+            </div>
+
+            <div class="polaroid-customizer">
+                <div style="text-align: left;">
+                    <label style="font-size:0.8rem; color:var(--color-text-muted); font-weight:600;"><i class="fa-solid fa-palette"></i> Pilih Tema Polaroid:</label>
+                    <div class="polaroid-theme-selector" id="theme-selector">
+                        <button class="theme-pill active" data-theme="theme-classic"><i class="fa-solid fa-square"></i> Classic</button>
+                        <button class="theme-pill" data-theme="theme-vintage"><i class="fa-solid fa-scroll"></i> Vintage</button>
+                        <button class="theme-pill" data-theme="theme-pastel"><i class="fa-solid fa-heart"></i> Pastel Pink</button>
+                        <button class="theme-pill" data-theme="theme-midnight"><i class="fa-solid fa-moon"></i> Midnight Neon</button>
+                        <button class="theme-pill" data-theme="theme-gold"><i class="fa-solid fa-gem"></i> Golden Luxe</button>
+                        <button class="theme-pill" data-theme="theme-film"><i class="fa-solid fa-film"></i> Film Strip</button>
+                        <button class="theme-pill" data-theme="theme-party"><i class="fa-solid fa-cake-candles"></i> Party Confetti</button>
+                        <button class="theme-pill" data-theme="theme-tape"><i class="fa-solid fa-note-sticky"></i> Cute Tape</button>
+                    </div>
+                </div>
+
+                <div style="text-align: left;">
+                    <label style="font-size:0.8rem; color:var(--color-text-muted); font-weight:600;"><i class="fa-solid fa-pen-nib"></i> Tulis Pesan / Catatan:</label>
+                    <input type="text" id="polaroid-input-caption" placeholder="Happy Birthday..." maxlength="35" style="margin: 4px 0 0 0; padding: 10px 14px; font-size: 0.9rem;">
+                </div>
+
+                <div class="controls" style="margin-top: 0.5rem; display:flex; justify-content:center; gap:8px; flex-wrap: wrap;">
+                    <button class="btn" id="btn-close-polaroid" style="flex: 1 1 auto;">Batal</button>
+                    <button class="btn btn-solid" id="btn-download-polaroid" style="flex: 1 1 auto;"><i class="fa-solid fa-download"></i> Unduh</button>
+                    <button class="btn" id="btn-share-polaroid" style="flex: 1 1 auto;"><i class="fa-solid fa-share-nodes"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Confirm Modal -->
+    <div id="upload-confirm-modal" class="modal-overlay hidden">
+        <div class="glass-card modal-content" style="padding: 1.8rem 1.25rem;">
+            <i class="fa-solid fa-images" style="font-size: 2.5rem; color: var(--color-accent); margin-bottom: 0.8rem;"></i>
+            <h2 style="font-size: 1.5rem;">Berhasil Diunggah!</h2>
+            <p style="color: var(--color-text-muted); margin: 0.8rem 0; font-size: 0.9rem;">Fotomu berhasil dimasukkan ke galeri. Mau langsung buat Polaroid dengan tema keren?</p>
+            <div class="controls" style="display:flex; justify-content:center; gap:10px; flex-wrap: wrap;">
+                <button class="btn" id="btn-later-polaroid" style="flex: 1 1 120px;">Nanti Saja</button>
+                <button class="btn btn-solid" id="btn-yes-polaroid" style="flex: 1 1 140px;">Ya, Buat Polaroid!</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app">
+        <audio id="custom-audio-player" loop></audio>
+        <audio id="voice-audio-element" src="VOICE.mp3"></audio>
+
+        <div class="music-controller">
+            <button class="music-btn" id="toggle-music" title="Play/Pause Music">
+                <i class="fa-solid fa-music"></i>
+            </button>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero container animate-up">
+            <div class="glass-card greeting-card">
+                <h1 class="greeting-title">
+                    Alloooww, Happyy Birthdayy,<br>
+                    <span id="display-name">Bokem</span> 
+                </h1>
+                
+                <p class="greeting-message" style="font-size: clamp(0.95rem, 3vw, 1.15rem); color: #f0f4f8;">
+                    Selamat ulang tahun, yaa sayangku, cintaku, cantikkuu, bokemkuu. Terima kasih sudah hadir dan bikin hari-hariku jadi jauh lebih hangat dan berwarna, semoga tiap hari kamu selalu happy yaaww, karena lihat kamu happy jadi lucu. Semoga semakin TUA dan semakin JOMPO dirimu ini, kamu makin bahagia, makin lancar segala urusannya, dan semua impianmu perlahan terwujud. Aku bakal selalu ada di sini buat dukung kamu. I LOVEE UU, I MISS UU. HAPPYY BIRTHDAYYY.... YEAAAYYY
+                </p>
+
+                <!-- Video Section -->
+                <div class="video-card" id="video-card">
+                    <div style="font-size:0.85rem; font-weight:600; color:var(--color-accent); margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
+                        <span><i class="fa-solid fa-film"></i> Video Spesial</span>
+                    </div>
+                    <div class="greeting-video-wrapper" id="video-wrapper">
+                        <video id="greeting-video-element" playsinline preload="metadata" poster="https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=800&auto=format&fit=crop"></video>
+                        <button class="video-center-play-btn" id="video-play-btn" title="Putar Video">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                    </div>
+                    <div class="video-controls-bar">
+                        <span style="font-size:0.85rem; color:var(--color-accent); font-weight:600;" id="video-status-text"><i class="fa-solid fa-circle-play"></i> Klik video untuk memutar</span>
+                        <span style="font-size:0.8rem; color:var(--color-text-muted);" id="video-timer">00:00 / 00:00</span>
+                    </div>
+                </div>
+
+                <!-- Voice Note Section -->
+                <div class="voice-card" id="voice-card">
+                    <div style="font-size:0.85rem; font-weight:600; color:var(--color-accent); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                        <i class="fa-solid fa-microphone"></i> Voice Note Spesial Untukmu
+                    </div>
+                    <div class="voice-player">
+                        <button class="voice-play-btn" id="voice-play-btn"><i class="fa-solid fa-play"></i></button>
+                        <div class="voice-waveform" id="voice-waveform">
+                            <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+                            <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+                            <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+                            <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+                            <div class="voice-bar"></div><div class="voice-bar"></div><div class="voice-bar"></div>
+                        </div>
+                    </div>
+                    <p style="font-style: italic; font-size:0.85rem; color:var(--color-text-muted); line-height:1.4;">
+                        "Selamat ulang tahun bokem. Semoga kamu makin panjang umur, sehat selalu, rejeki lancar, dan apa yang kamu inginkan tercapai dengan mudah..."
+                    </p>
+                </div>
+
+                <button class="btn" style="margin-top:1.5rem;" onclick="document.getElementById('cake-section').scrollIntoView({behavior: 'smooth'})">
+                    Lesgooww make a wish <i class="fa-solid fa-arrow-down"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Cake Section -->
+        <section id="cake-section" class="cake-section container animate-up">
+            <h2 class="section-title">Make a Wish</h2>
+            <p style="color: var(--color-text-muted); font-size:0.95rem;">Make a Wish duluu yaa sayang, habis itu tiup lilinnyaa</p>
+            
+            <div class="cake-container">
+                <div class="cake">
+                    <div class="candle-container">
+                        <div class="candle"><div class="flame"></div><div class="smoke"></div></div>
+                        <div class="candle"><div class="flame"></div><div class="smoke"></div></div>
+                        <div class="candle"><div class="flame"></div><div class="smoke"></div></div>
+                    </div>
+                </div>
+                
+                <button class="btn btn-solid" id="blow-candle-btn" style="margin-top: 2.5rem;">
+                    <i class="fa-solid fa-wind"></i> Tiup Lilin
+                </button>
+            </div>
+        </section>
+
+        <!-- Photo Studio Section -->
+        <section id="studio-section" class="photo-studio container animate-up">
+            <h2 class="section-title">Photo Day 📸</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--color-text-muted); font-size: 0.95rem;">
+                Mau dong foto lucunya hari ini, minimal 2 dehh yaa sayaang, terus kirim ke aku
+            </p>
+
+            <div class="studio-grid">
+                <!-- Webcam & Upload Card -->
+                <div class="webcam-container glass-card">
+                    <h3 style="font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+                        <i class="fa-solid fa-camera"></i> Live Camera / Upload
+                    </h3>
+                    
+                    <div class="video-wrapper">
+                        <video id="webcam" class="filter-normal" autoplay playsinline muted></video>
+                    </div>
+
+                    <!-- Filter Options -->
+                    <div class="filter-section-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Pilih Filter Foto:</div>
+                    <div class="filter-pills" id="camera-filter-pills">
+                        <button class="filter-btn active" data-filter="filter-normal">Normal</button>
+                        <button class="filter-btn" data-filter="filter-sepia">Sepia</button>
+                        <button class="filter-btn" data-filter="filter-bw">B&amp;W</button>
+                        <button class="filter-btn" data-filter="filter-vintage">Vintage</button>
+                        <button class="filter-btn" data-filter="filter-warm">Warm</button>
+                        <button class="filter-btn" data-filter="filter-cyber">Cyber</button>
+                        <button class="filter-btn" data-filter="filter-soft">Soft</button>
+                        <button class="filter-btn" data-filter="filter-pink">Pink</button>
+                    </div>
+                    
+                    <div class="controls" style="margin-top: 6px; display:flex; justify-content:center; gap:8px; width:100%; min-width:0; box-sizing:border-box;">
+                        <button class="btn" id="start-cam-btn" style="flex: 1 1 0; min-width:0; padding: 10px 8px; font-size:0.85rem;">
+                            <i class="fa-solid fa-video"></i> Kamera
+                        </button>
+                        <button class="btn btn-solid" id="capture-btn" disabled style="flex: 1 1 0; min-width:0; padding: 10px 8px; font-size:0.85rem;">
+                            <i class="fa-solid fa-camera-retro"></i> Jepret
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 8px; border-top: 1px solid var(--glass-border); padding-top: 8px; width:100%;">
+                        <h4 style="margin-bottom: 4px; font-size:0.8rem; font-weight: 600;">Atau Unggah Foto</h4>
+                        <div class="file-upload-wrapper" style="margin: 0;">
+                            <input type="file" id="file-upload" multiple accept="image/*">
+                            <div class="file-upload-display">
+                                <i class="fa-solid fa-cloud-arrow-up"></i> Pilih Minimal 2 Foto
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gallery Grid Card -->
+                <div class="gallery-container glass-card" style="text-align: left;">
+                    <h3 style="font-size: 1.15rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-book-open"></i> Birthday Photos
+                    </h3>
+                    <p style="color:var(--color-text-muted); font-size:0.85rem; margin-top: 2px;">
+                        Klik foto untuk membuat versi Polaroid.
+                    </p>
+                    
+                    <div class="album-grid" id="album-grid" style="width: 100%;">
+                        <p id="empty-album-text" style="color: var(--color-text-muted); grid-column: 1/-1; padding: 2rem 0; text-align: center; font-size: 0.9rem;">Belum ada foto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section Photo Puzzle Game -->
+        <section id="puzzle-section" class="puzzle-section container animate-up">
+            <h2 class="section-title">Photo Puzzle 🧩</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem; font-size:0.9rem;">
+                Susun kepingan foto menjadi gambar utuh! Sentuh kepingan pertama, lalu sentuh kepingan kedua untuk menukar posisinya.
+            </p>
+
+            <div class="puzzle-level-selector">
+                <button class="level-btn active" data-level="1"><i class="fa-solid fa-seedling"></i> Level 1 (9 Keping)</button>
+                <button class="level-btn" data-level="2"><i class="fa-solid fa-fire-flame-curved"></i> Level 2 (15 Keping)</button>
+                <button class="level-btn" data-level="3"><i class="fa-solid fa-skull"></i> Level 3 (21 Keping)</button>
+                <button class="level-btn" data-level="4"><i class="fa-solid fa-star"></i> Level 4 (Bonus Custom)</button>
+            </div>
+
+            <!-- Bonus Level Custom Controls -->
+            <div id="bonus-config-card" class="bonus-config-card">
+                <h4 style="color: var(--color-accent); font-size: 0.95rem; margin-bottom: 8px;">
+                    <i class="fa-solid fa-sliders"></i> Pengaturan Level Bonus Custom:
+                </h4>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <label style="font-size:0.8rem; color:var(--color-text-muted);">Pilih Foto Puzzle:</label>
+                    <div class="file-upload-wrapper" style="margin:0;">
+                        <input type="file" id="puzzle-custom-upload" accept="image/*">
+                        <div class="file-upload-display" style="padding: 8px 12px; font-size:0.8rem;">
+                            <i class="fa-solid fa-upload"></i> Unggah Foto Sendiri
+                        </div>
+                    </div>
+
+                    <label style="font-size:0.8rem; color:var(--color-text-muted); margin-top:4px;">Atur Jumlah Keping Puzzle:</label>
+                    <select id="puzzle-piece-count-select">
+                        <option value="9">9 Keping (3 x 3)</option>
+                        <option value="12">12 Keping (3 x 4)</option>
+                        <option value="15" selected>15 Keping (3 x 5)</option>
+                        <option value="16">16 Keping (4 x 4)</option>
+                        <option value="20">20 Keping (4 x 5)</option>
+                        <option value="21">21 Keping (3 x 7)</option>
+                        <option value="25">25 Keping (5 x 5)</option>
+                    </select>
+
+                    <button class="btn btn-solid" id="btn-apply-bonus-puzzle" style="margin-top:6px; width:100%; font-size:0.85rem; padding:8px 16px;">
+                        <i class="fa-solid fa-play"></i> Mulai Puzzle Custom
+                    </button>
+                </div>
+            </div>
+
+            <div class="puzzle-container" style="margin-top:1rem;">
+                <div class="puzzle-stats-bar">
+                    <div><i class="fa-solid fa-clock"></i> Waktu: <span id="puzzle-timer">00:00</span></div>
+                    <div><i class="fa-solid fa-arrows-rotate"></i> Langkah: <span id="puzzle-moves">0</span></div>
+                    <div><i class="fa-solid fa-trophy"></i> Level: <span id="puzzle-level-title">1 (9 Keping)</span></div>
+                </div>
+
+                <div id="puzzle-board" class="puzzle-board"></div>
+
+                <div id="puzzle-preview-box" class="puzzle-preview-box">
+                    <img id="puzzle-preview-img" src="" alt="Petunjuk Foto">
+                </div>
+
+                <div class="puzzle-controls">
+                    <button class="btn" id="btn-toggle-puzzle-preview" style="padding: 8px 14px; font-size:0.8rem;">
+                        <i class="fa-solid fa-eye"></i> Lihat Foto
+                    </button>
+                    <button class="btn" id="btn-shuffle-puzzle" style="padding: 8px 14px; font-size:0.8rem;">
+                        <i class="fa-solid fa-shuffle"></i> Acak Ulang
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mini Game Section -->
+        <section id="game-section" class="game-section container animate-up">
+            <h2 class="section-title">Catch The Hearts ❤️</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem; font-size:0.9rem;">
+                Tangkap hati untuk skor! Hindari Bom (💣) dan Jebakan (🕸️).<br>Jika kena 3 kali, permainan berakhir.
+            </p>
+            
+            <div class="game-container">
+                <div class="game-stats">
+                    <div class="score">Skor: <span id="game-score">0</span></div>
+                    <div class="lives">Nyawa: <span id="game-lives">❤️❤️❤️</span></div>
+                </div>
+                
+                <div class="game-overlay" id="game-start-overlay">
+                    <h3 style="font-size:1.5rem; margin-bottom:0.8rem; color:var(--color-accent);">Siap Menangkap Cinta?</h3>
+                    <button class="btn btn-solid" id="start-game-btn">Main Sekarang</button>
+                </div>
+                
+                <div class="game-overlay hidden" id="game-over-overlay">
+                    <h3 style="font-size:1.5rem; margin-bottom:0.8rem; color:#ff4757;">Game Over!</h3>
+                    <p style="margin-bottom:0.8rem; font-size:1.1rem;">Skor Akhir: <span id="final-score">0</span></p>
+                    <button class="btn btn-solid" id="restart-game-btn">Main Lagi</button>
+                </div>
+
+                <canvas id="game-canvas"></canvas>
+            </div>
+        </section>
+
+        <!-- Wishing Wall Section -->
+        <section id="wishing-wall-section" class="wishing-wall container animate-up">
+            <h2 class="section-title">Dinding Harapan</h2>
+            <p style="color: var(--color-text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">Tuliskan doa dan harapan terbaikmu di sini.</p>
+            <div class="wish-form">
+                <input type="text" id="wish-input" class="wish-input" placeholder="Tulis harapanmu..." maxlength="100">
+                <button class="btn btn-solid" id="post-wish-btn">
+                    <i class="fa-solid fa-thumbtack"></i> Tempel
+                </button>
+            </div>
+            <div class="wall-grid" id="wall-grid">
+                <div class="sticky-note" style="background: #ff9a9e; transform: rotate(3deg);">
+                    <div>"Semoga kita selalu bahagia sama-sama terus yaa! ❤️"</div>
+                    <div class="note-author">- Aku</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        let userName = "Bokem";
+        let isMusicPlaying = false;
+        let isVoicePlaying = false;
+        let isVideoPlaying = false;
+        let melodyLoop = null;
+
+        const VOICE_NOTE_URL = "Voice1.mp3"; 
+        // Ubah variabel di bawah ini sesuai nama file lagu MP3 Anda (misal: "lagu.mp3") atau link URL audio
+        const BACKGROUND_MUSIC_URL = "Bidadari_Manisku.mp3";
+        // Ubah variabel di bawah ini sesuai nama file video MP3/MP4 Anda (misal: "video.mp4")
+        const GREETING_VIDEO_URL = "Video1.mp4";
+
+        const bgAudioPlayer = document.getElementById('custom-audio-player');
+        if (bgAudioPlayer && BACKGROUND_MUSIC_URL) {
+            bgAudioPlayer.src = BACKGROUND_MUSIC_URL;
+        }
+
+        /* Toast Notification Helper */
+        function showToast(message, icon = "fa-solid fa-bell", duration = 3000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="${icon}" style="color: var(--color-accent); font-size: 1.2rem;"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
+
+        /* Confetti Effect */
+        function fireConfetti(intense = false) {
+            if (typeof confetti !== 'function') return;
+            const duration = intense ? 4000 : 2000;
+            const end = Date.now() + duration;
+            (function frame() {
+                confetti({ particleCount: intense ? 6 : 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#FFD700', '#ffffff', '#ff9a9e'] });
+                confetti({ particleCount: intense ? 6 : 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#FFD700', '#ffffff', '#ff9a9e'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        /* Ambient Floating Bubbles & Hearts */
+        function createBubbles() {
+            for(let i=0; i<25; i++) {
+                let el = document.createElement('div');
+                if (Math.random() > 0.65) { 
+                    el.className = 'floating-heart'; 
+                    el.innerHTML = '❤️'; 
+                    el.style.fontSize = (Math.random()*20+12)+'px'; 
+                } else { 
+                    el.className = 'floating-bubble'; 
+                    let size = Math.random()*50+15+'px'; 
+                    el.style.width = size; 
+                    el.style.height = size; 
+                }
+                el.style.left = Math.random()*100+'vw'; 
+                el.style.animationDuration = Math.random()*15+8+'s'; 
+                el.style.animationDelay = Math.random()*8+'s';
+                document.body.appendChild(el);
+            }
+        }
+        createBubbles();
+
+        /* Scroll Animation Observer */
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+
+        async function setupSynthesizer() {
+            try {
+                if (typeof Tone === 'undefined') return;
+                await Tone.start();
+                const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+                synth.volume.value = -8;
+                
+                const notes = [
+                    { time: "0:0:0", note: "G4", dur: "8n" }, { time: "0:0:2", note: "G4", dur: "8n" },
+                    { time: "0:1:0", note: "A4", dur: "4n" }, { time: "0:2:0", note: "G4", dur: "4n" },
+                    { time: "0:3:0", note: "C5", dur: "4n" }, { time: "1:0:0", note: "B4", dur: "2n" },
+                    { time: "1:2:0", note: "G4", dur: "8n" }, { time: "1:2:2", note: "G4", dur: "8n" },
+                    { time: "1:3:0", note: "A4", dur: "4n" }, { time: "2:0:0", note: "G4", dur: "4n" },
+                    { time: "2:1:0", note: "D5", dur: "4n" }, { time: "2:2:0", note: "C5", dur: "2n" }
+                ];
+
+                Tone.Transport.bpm.value = 110;
+                melodyLoop = new Tone.Part((time, value) => {
+                    synth.triggerAttackRelease(value.note, value.dur, time);
+                }, notes).start(0);
+                melodyLoop.loop = true; 
+                melodyLoop.loopEnd = "3:0:0";
+            } catch(e) { console.log("Tone.js fallback active", e); }
+        }
+
+        /* Enter Button Handler */
+        function handleEnterApp() {
+            const guestInput = document.getElementById('guest-name');
+            const inputVal = guestInput ? guestInput.value.trim() : '';
+            if (!inputVal) return showToast("Kasih tau namamu dulu dong manis...", "fa-solid fa-circle-exclamation");
+            
+            userName = inputVal;
+            const displayName = document.getElementById('display-name');
+            if (displayName) displayName.innerText = userName;
+            
+            const welcomeModal = document.getElementById('welcome-modal');
+            if (welcomeModal) welcomeModal.classList.add('hidden');
+            setTimeout(() => { 
+                const mainApp = document.getElementById('main-app');
+                if (mainApp) mainApp.classList.add('visible'); 
+                fireConfetti(); 
+                resizeGame(); 
+            }, 400);
+
+            toggleBackgroundMusic(true);
+            showToast(`Happy Birthday, ${userName}! ❤️`, "fa-solid fa-champagne-glasses");
+        }
+
+        const enterBtn = document.getElementById('enter-btn');
+        if (enterBtn) enterBtn.addEventListener('click', handleEnterApp);
+        const guestNameInput = document.getElementById('guest-name');
+        if (guestNameInput) {
+            guestNameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleEnterApp();
+            });
+        }
+
+        /* Toggle Background Music */
+        async function toggleBackgroundMusic(forceStart = null) {
+            const musicBtn = document.getElementById('toggle-music');
+            const icon = musicBtn ? musicBtn.querySelector('i') : null;
+
+            if (forceStart !== null) isMusicPlaying = !forceStart;
+
+            if (!isMusicPlaying) {
+                if (BACKGROUND_MUSIC_URL && bgAudioPlayer) {
+                    bgAudioPlayer.play().then(() => {
+                        if (icon) icon.className = 'fa-solid fa-pause';
+                        isMusicPlaying = true;
+                    }).catch(async (e) => {
+                        console.log("File BGM gagal diputar, menggunakan melodi bawaan:", e);
+                        if (!melodyLoop) await setupSynthesizer();
+                        if (typeof Tone !== 'undefined' && Tone.Transport) Tone.Transport.start();
+                        if (icon) icon.className = 'fa-solid fa-pause';
+                        isMusicPlaying = true;
+                    });
+                } else {
+                    if (!melodyLoop) await setupSynthesizer();
+                    try {
+                        if (typeof Tone !== 'undefined' && Tone.Transport) Tone.Transport.start();
+                        if (icon) icon.className = 'fa-solid fa-pause';
+                        isMusicPlaying = true;
+                    } catch(e) { console.log("Music play blocked", e); }
+                }
+            } else {
+                if (bgAudioPlayer) bgAudioPlayer.pause();
+                if (typeof Tone !== 'undefined' && Tone.Transport) Tone.Transport.pause();
+                if (icon) icon.className = 'fa-solid fa-music';
+                isMusicPlaying = false;
+            }
+        }
+        const toggleMusicBtn = document.getElementById('toggle-music');
+        if (toggleMusicBtn) toggleMusicBtn.addEventListener('click', () => toggleBackgroundMusic());
+
+        /* Voice Note Audio Logic */
+        const voiceAudio = document.getElementById('voice-audio-element');
+        if (voiceAudio) voiceAudio.src = VOICE_NOTE_URL;
+        const voiceCard = document.getElementById('voice-card');
+        const voicePlayBtn = document.getElementById('voice-play-btn');
+
+        if (voicePlayBtn && voiceAudio) {
+            voicePlayBtn.addEventListener('click', () => {
+                if (!isVoicePlaying) {
+                    // Pause Video if playing
+                    if (greetingVideo && isVideoPlaying) {
+                        greetingVideo.pause();
+                        isVideoPlaying = false;
+                        if (videoPlayBtn) videoPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i> Putar Video';
+                    }
+
+                    voiceAudio.play().then(() => {
+                        isVoicePlaying = true;
+                        if (voiceCard) voiceCard.classList.add('playing');
+                        voicePlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                        if(isMusicPlaying) toggleBackgroundMusic(false);
+                    }).catch(() => {
+                        showToast("Tidak dapat memutar Voice Note.", "fa-solid fa-circle-exclamation");
+                    });
+                } else {
+                    voiceAudio.pause();
+                    isVoicePlaying = false;
+                    if (voiceCard) voiceCard.classList.remove('playing');
+                    voicePlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+            });
+
+            voiceAudio.addEventListener('ended', () => {
+                isVoicePlaying = false;
+                if (voiceCard) voiceCard.classList.remove('playing');
+                voicePlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            });
+        }
+
+        /* Greeting Video Player Logic */
+        const greetingVideo = document.getElementById('greeting-video-element');
+        if (greetingVideo && GREETING_VIDEO_URL) greetingVideo.src = GREETING_VIDEO_URL;
+        const videoPlayBtn = document.getElementById('video-play-btn');
+        const videoWrapper = document.getElementById('video-wrapper');
+        const videoTimer = document.getElementById('video-timer');
+        const videoStatusText = document.getElementById('video-status-text');
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        }
+
+        function toggleVideoPlay() {
+            if (!greetingVideo) return;
+            if (!isVideoPlaying) {
+                // Pause Voice Note if playing
+                if (voiceAudio && isVoicePlaying) {
+                    voiceAudio.pause();
+                    isVoicePlaying = false;
+                    if (voiceCard) voiceCard.classList.remove('playing');
+                    if (voicePlayBtn) voicePlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                }
+
+                greetingVideo.play().then(() => {
+                    isVideoPlaying = true;
+                    if (videoWrapper) videoWrapper.classList.add('is-playing');
+                    if (videoPlayBtn) videoPlayBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    if (videoStatusText) videoStatusText.innerHTML = '<i class="fa-solid fa-circle-pause"></i> Video Sedang Diputar';
+                    if (isMusicPlaying) toggleBackgroundMusic(false);
+                }).catch(() => {
+                    showToast("File video tidak ditemukan / tidak dapat diputar.", "fa-solid fa-circle-exclamation");
+                });
+            } else {
+                greetingVideo.pause();
+                isVideoPlaying = false;
+                if (videoWrapper) videoWrapper.classList.remove('is-playing');
+                if (videoPlayBtn) videoPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                if (videoStatusText) videoStatusText.innerHTML = '<i class="fa-solid fa-circle-play"></i> Klik video untuk memutar';
+            }
+        }
+
+        if (videoPlayBtn) videoPlayBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleVideoPlay(); });
+        if (videoWrapper) videoWrapper.addEventListener('click', () => toggleVideoPlay());
+
+        if (greetingVideo) {
+            greetingVideo.addEventListener('timeupdate', () => {
+                if (videoTimer) {
+                    const current = formatTime(greetingVideo.currentTime);
+                    const total = formatTime(greetingVideo.duration);
+                    videoTimer.innerText = `${current} / ${total}`;
+                }
+            });
+
+            greetingVideo.addEventListener('ended', () => {
+                isVideoPlaying = false;
+                if (videoWrapper) videoWrapper.classList.remove('is-playing');
+                if (videoPlayBtn) videoPlayBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                if (videoStatusText) videoStatusText.innerHTML = '<i class="fa-solid fa-circle-play"></i> Klik video untuk memutar lagi';
+            });
+        }
+
+        /* Blow Candle Button Handler */
+        const btnBlow = document.getElementById('blow-candle-btn');
+        const candleContainer = document.querySelector('.candle-container');
+
+        if (btnBlow && candleContainer) {
+            btnBlow.addEventListener('click', function() {
+                if(candleContainer.classList.contains('blown-out')) return;
+                candleContainer.classList.add('blown-out');
+                fireConfetti(true);
+                showToast("Yeay! Harapanmu telah diterbangkan ke langit.", "fa-solid fa-gift", 4000);
+                this.innerHTML = '<i class="fa-solid fa-check"></i> Lilin Padam';
+                this.disabled = true;
+            });
+        }
+
+        let webcamStream = null;
+        let isCameraOn = false;
+        let activeFilterClass = "filter-normal";
+        const videoElement = document.getElementById('webcam');
+
+        const startCamBtn = document.getElementById('start-cam-btn');
+        if (startCamBtn) {
+            startCamBtn.addEventListener('click', async function() {
+                if (isCameraOn) {
+                    if (webcamStream) webcamStream.getTracks().forEach(t => t.stop());
+                    if (videoElement) videoElement.srcObject = null;
+                    isCameraOn = false;
+                    this.innerHTML = '<i class="fa-solid fa-video"></i> Kamera';
+                    const capBtn = document.getElementById('capture-btn');
+                    if (capBtn) capBtn.disabled = true;
+                    return;
+                }
+                try {
+                    webcamStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
+                    if (videoElement) videoElement.srcObject = webcamStream;
+                    isCameraOn = true;
+                    this.innerHTML = '<i class="fa-solid fa-video-slash"></i> Tutup';
+                    const capBtn = document.getElementById('capture-btn');
+                    if (capBtn) capBtn.disabled = false;
+                } catch (err) { showToast("Gagal membuka kamera.", "fa-solid fa-triangle-exclamation"); }
+            });
+        }
+
+        document.querySelectorAll('#camera-filter-pills .filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#camera-filter-pills .filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                activeFilterClass = this.getAttribute('data-filter');
+                if (videoElement) videoElement.className = activeFilterClass;
+            });
+        });
+
+        const captureBtn = document.getElementById('capture-btn');
+        if (captureBtn) {
+            captureBtn.addEventListener('click', () => {
+                if (!isCameraOn || !videoElement) return;
+                const canvas = document.createElement('canvas');
+                canvas.width = videoElement.videoWidth || 640; 
+                canvas.height = videoElement.videoHeight || 480;
+                const ctx = canvas.getContext('2d');
+                ctx.translate(canvas.width, 0); 
+                ctx.scale(-1, 1);
+                
+                if (activeFilterClass === 'filter-sepia') ctx.filter = 'sepia(0.65) contrast(1.1) saturate(1.2)';
+                else if (activeFilterClass === 'filter-bw') ctx.filter = 'grayscale(1) contrast(1.25)';
+                else if (activeFilterClass === 'filter-vintage') ctx.filter = 'sepia(0.35) contrast(1.15) hue-rotate(-10deg)';
+                else if (activeFilterClass === 'filter-warm') ctx.filter = 'saturate(1.6) contrast(1.1) hue-rotate(-15deg)';
+                else if (activeFilterClass === 'filter-cyber') ctx.filter = 'contrast(1.35) hue-rotate(180deg) saturate(1.8)';
+                else if (activeFilterClass === 'filter-soft') ctx.filter = 'brightness(1.1) contrast(0.9)';
+                else if (activeFilterClass === 'filter-pink') ctx.filter = 'hue-rotate(300deg) saturate(1.5)';
+
+                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                addToAlbum(canvas.toDataURL('image/png'));
+                fireConfetti();
+            });
+        }
+
+        const fileUpload = document.getElementById('file-upload');
+        if (fileUpload) {
+            fileUpload.addEventListener('change', function(e) {
+                const files = e.target.files;
+                if (!files || files.length < 2) return showToast("Pilih minimal 2 foto ya sayang!", "fa-solid fa-circle-exclamation");
+                
+                let loadedCount = 0;
+                let tempImage = null;
+
+                Array.from(files).forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const dataUrl = evt.target.result;
+                        addToAlbum(dataUrl);
+                        if(index === 0) tempImage = dataUrl;
+                        loadedCount++;
+                        if(loadedCount === files.length) {
+                            fileUpload.value = "";
+                            const uploadModal = document.getElementById('upload-confirm-modal');
+                            if (uploadModal) uploadModal.classList.remove('hidden');
+                            const yesBtn = document.getElementById('btn-yes-polaroid');
+                            if (yesBtn) {
+                                yesBtn.onclick = () => {
+                                    if (uploadModal) uploadModal.classList.add('hidden');
+                                    if(tempImage) openPolaroidModal(tempImage);
+                                };
+                            }
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                });
+            });
+        }
+
+        const btnLaterPolaroid = document.getElementById('btn-later-polaroid');
+        if (btnLaterPolaroid) {
+            btnLaterPolaroid.addEventListener('click', () => {
+                const uploadModal = document.getElementById('upload-confirm-modal');
+                if (uploadModal) uploadModal.classList.add('hidden');
+            });
+        }
+
+        function addToAlbum(dataUrl) {
+            const grid = document.getElementById('album-grid');
+            const emptyText = document.getElementById('empty-album-text');
+            if (emptyText) emptyText.style.display = 'none';
+            const card = document.createElement('div');
+            card.className = 'memory-card animate-up in-view';
+            card.innerHTML = `<img src="${dataUrl}">`;
+            card.onclick = () => openPolaroidModal(dataUrl);
+            if (grid) grid.prepend(card);
+        }
+
+        const polaroidModal = document.getElementById('polaroid-modal');
+        const polaroidRenderArea = document.getElementById('polaroid-render-area');
+        const polaroidImg = document.getElementById('polaroid-img-target');
+        const polaroidCaption = document.getElementById('polaroid-caption-text');
+        const polaroidInputCaption = document.getElementById('polaroid-input-caption');
+
+        function openPolaroidModal(imgSrc) {
+            if (polaroidImg) polaroidImg.src = imgSrc;
+            if (polaroidCaption) polaroidCaption.innerText = `Happy Birthday, ${userName}!`;
+            if (polaroidInputCaption) polaroidInputCaption.value = `Happy Birthday, ${userName}!`;
+            if (polaroidModal) polaroidModal.classList.remove('hidden');
+        }
+
+        const closeBtnPol = document.getElementById('btn-close-polaroid');
+        if (closeBtnPol) closeBtnPol.addEventListener('click', () => { if (polaroidModal) polaroidModal.classList.add('hidden'); });
+        const closeBtnPolTop = document.getElementById('btn-close-polaroid-top');
+        if (closeBtnPolTop) closeBtnPolTop.addEventListener('click', () => { if (polaroidModal) polaroidModal.classList.add('hidden'); });
+
+        if (polaroidInputCaption) {
+            polaroidInputCaption.addEventListener('input', (e) => {
+                if (polaroidCaption) polaroidCaption.innerText = e.target.value.trim() || 'Happy Birthday!';
+            });
+        }
+
+        document.querySelectorAll('#theme-selector .theme-pill').forEach(pill => {
+            pill.addEventListener('click', function() {
+                document.querySelectorAll('#theme-selector .theme-pill').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                const selectedTheme = this.getAttribute('data-theme');
+                if (polaroidRenderArea) polaroidRenderArea.className = `polaroid-wrapper ${selectedTheme}`;
+            });
+        });
+
+        async function generatePolaroidCanvas() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 400; 
+            canvas.height = 480;
+            
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    const margin = 20;
+                    const imgSize = canvas.width - (margin * 2);
+                    const size = Math.min(img.width, img.height);
+                    const sx = (img.width - size) / 2;
+                    const sy = (img.height - size) / 2;
+                    
+                    ctx.drawImage(img, sx, sy, size, size, margin, margin, imgSize, imgSize);
+                    ctx.strokeStyle = "#dddddd";
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(margin, margin, imgSize, imgSize);
+                    
+                    const captionText = document.getElementById('polaroid-caption-text') ? document.getElementById('polaroid-caption-text').innerText : 'Happy Birthday!';
+                    ctx.fillStyle = "#333333";
+                    ctx.font = "bold 28px 'Caveat', cursive, sans-serif";
+                    ctx.textAlign = "center";
+                    ctx.fillText(captionText, canvas.width / 2, canvas.height - 30);
+                    
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.onerror = () => {
+                    resolve(canvas.toDataURL('image/png'));
+                };
+                img.src = polaroidImg ? polaroidImg.src : '';
+            });
+        }
+
+        const btnDownloadPolaroid = document.getElementById('btn-download-polaroid');
+        if (btnDownloadPolaroid) {
+            btnDownloadPolaroid.addEventListener('click', async () => {
+                try {
+                    const dataUrl = await generatePolaroidCanvas();
+                    const link = document.createElement('a');
+                    link.download = `Polaroid_${userName || 'Bokem'}.png`;
+                    link.href = dataUrl;
+                    link.click();
+                    showToast("Polaroid berhasil diunduh!", "fa-solid fa-download");
+                } catch(e) {
+                    showToast("Gagal mengunduh Polaroid.", "fa-solid fa-circle-exclamation");
+                }
+            });
+        }
+
+        const btnSharePolaroid = document.getElementById('btn-share-polaroid');
+        if (btnSharePolaroid) {
+            btnSharePolaroid.addEventListener('click', async () => {
+                try {
+                    const dataUrl = await generatePolaroidCanvas();
+                    const res = await fetch(dataUrl);
+                    const blob = await res.blob();
+                    const file = new File([blob], 'polaroid.png', { type: 'image/png' });
+                    const shareData = { title: 'Polaroid Kenangan', text: 'Lihat momen spesial ini!', files: [file] };
+                    if (navigator.canShare && navigator.canShare(shareData)) {
+                        await navigator.share(shareData);
+                    } else {
+                        showToast("Browser tidak mendukung share file langsung.", "fa-solid fa-circle-info");
+                    }
+                } catch(e) {
+                    showToast("Berbagi tidak dapat dilakukan di browser ini.", "fa-solid fa-circle-info");
+                }
+            });
+        }
+
+        const PUZZLE_DEFAULT_IMAGES = {
+            level1: "puzzle1.jpeg",
+            level2: "puzzle2.jpeg",
+            level3: "puzzle3.jpeg",
+        };
+
+        let currentPuzzleLevel = 1;
+        let puzzleCols = 3, puzzleRows = 3;
+        let puzzlePiecesCount = 9;
+        let puzzlePiecesState = [];
+        let selectedPieceIndex = null;
+        let puzzleMoves = 0;
+        let puzzleTimerSeconds = 0;
+        let puzzleTimerInterval = null;
+        let isPuzzleSolved = false;
+        let customPuzzleImage = null;
+
+        function setupPuzzleLevel(level) {
+            currentPuzzleLevel = parseInt(level);
+            document.querySelectorAll('.puzzle-level-selector .level-btn').forEach(b => {
+                b.classList.toggle('active', parseInt(b.getAttribute('data-level')) === currentPuzzleLevel);
+            });
+
+            const bonusCard = document.getElementById('bonus-config-card');
+            if (currentPuzzleLevel === 4) {
+                if (bonusCard) bonusCard.classList.add('show');
+                const countSelect = document.getElementById('puzzle-piece-count-select');
+                setPuzzleDimensionsFromCount(countSelect ? parseInt(countSelect.value) : 15);
+            } else {
+                if (bonusCard) bonusCard.classList.remove('show');
+                if (currentPuzzleLevel === 1) { puzzleCols = 3; puzzleRows = 3; } 
+                else if (currentPuzzleLevel === 2) { puzzleCols = 3; puzzleRows = 5; } 
+                else if (currentPuzzleLevel === 3) { puzzleCols = 7; puzzleRows = 3; }
+                puzzlePiecesCount = puzzleCols * puzzleRows;
+            }
+
+            const puzzleTitle = document.getElementById('puzzle-level-title');
+            if (puzzleTitle) puzzleTitle.innerText = `${currentPuzzleLevel} (${puzzlePiecesCount} Keping)`;
+            startPuzzleGame();
+        }
+
+        function setPuzzleDimensionsFromCount(count) {
+            switch(count) {
+                case 9: puzzleCols = 3; puzzleRows = 3; break;
+                case 12: puzzleCols = 3; puzzleRows = 4; break;
+                case 15: puzzleCols = 3; puzzleRows = 5; break;
+                case 16: puzzleCols = 4; puzzleRows = 4; break;
+                case 20: puzzleCols = 4; puzzleRows = 5; break;
+                case 21: puzzleCols = 7; puzzleRows = 3; break;
+                case 25: puzzleCols = 5; puzzleRows = 5; break;
+                default: puzzleCols = 3; puzzleRows = 3; break;
+            }
+            puzzlePiecesCount = puzzleCols * puzzleRows;
+        }
+
+        function getActivePuzzleImage() {
+            if (currentPuzzleLevel === 4 && customPuzzleImage) return customPuzzleImage;
+            return PUZZLE_DEFAULT_IMAGES[`level${currentPuzzleLevel}`] || PUZZLE_DEFAULT_IMAGES.level1;
+        }
+
+        function startPuzzleGame() {
+            const imgUrl = getActivePuzzleImage();
+            const previewImg = document.getElementById('puzzle-preview-img');
+            if (previewImg) previewImg.src = imgUrl;
+
+            clearInterval(puzzleTimerInterval);
+            puzzleTimerSeconds = 0;
+            puzzleMoves = 0;
+            isPuzzleSolved = false;
+            selectedPieceIndex = null;
+            const timerEl = document.getElementById('puzzle-timer');
+            if (timerEl) timerEl.innerText = "00:00";
+            const movesEl = document.getElementById('puzzle-moves');
+            if (movesEl) movesEl.innerText = "0";
+
+            puzzlePiecesState = Array.from({length: puzzlePiecesCount}, (_, i) => i);
+            do {
+                puzzlePiecesState.sort(() => Math.random() - 0.5);
+            } while (checkPuzzleSolved() && puzzlePiecesCount > 1);
+
+            renderPuzzleBoard(imgUrl);
+
+            puzzleTimerInterval = setInterval(() => {
+                if(!isPuzzleSolved) {
+                    puzzleTimerSeconds++;
+                    const m = String(Math.floor(puzzleTimerSeconds / 60)).padStart(2, '0');
+                    const s = String(puzzleTimerSeconds % 60).padStart(2, '0');
+                    const tEl = document.getElementById('puzzle-timer');
+                    if (tEl) tEl.innerText = `${m}:${s}`;
+                }
+            }, 1000);
+        }
+
+        function renderPuzzleBoard(imgUrl) {
+            const board = document.getElementById('puzzle-board');
+            if (!board) return;
+            board.innerHTML = '';
+            board.style.gridTemplateColumns = `repeat(${puzzleCols}, 1fr)`;
+            board.style.aspectRatio = `${puzzleCols} / ${puzzleRows}`;
+
+            puzzlePiecesState.forEach((correctPieceIndex, currentPosition) => {
+                const piece = document.createElement('div');
+                piece.className = 'puzzle-piece';
+
+                const correctCol = correctPieceIndex % puzzleCols;
+                const correctRow = Math.floor(correctPieceIndex / puzzleCols);
+
+                const xPercent = puzzleCols > 1 ? (correctCol / (puzzleCols - 1)) * 100 : 0;
+                const yPercent = puzzleRows > 1 ? (correctRow / (puzzleRows - 1)) * 100 : 0;
+
+                piece.style.backgroundImage = `url("${imgUrl}")`;
+                piece.style.backgroundSize = `${puzzleCols * 100}% ${puzzleRows * 100}%`;
+                piece.style.backgroundPosition = `${xPercent}% ${yPercent}%`;
+
+                if (correctPieceIndex === currentPosition) piece.classList.add('correct');
+                if (selectedPieceIndex === currentPosition) piece.classList.add('selected');
+
+                piece.addEventListener('click', () => handlePuzzlePieceClick(currentPosition));
+                board.appendChild(piece);
+            });
+        }
+
+        function handlePuzzlePieceClick(index) {
+            if (isPuzzleSolved) return;
+
+            if (selectedPieceIndex === null) {
+                selectedPieceIndex = index;
+            } else if (selectedPieceIndex === index) {
+                selectedPieceIndex = null;
+            } else {
+                const temp = puzzlePiecesState[selectedPieceIndex];
+                puzzlePiecesState[selectedPieceIndex] = puzzlePiecesState[index];
+                puzzlePiecesState[index] = temp;
+
+                puzzleMoves++;
+                const mEl = document.getElementById('puzzle-moves');
+                if (mEl) mEl.innerText = puzzleMoves;
+                selectedPieceIndex = null;
+
+                if (checkPuzzleSolved()) {
+                    isPuzzleSolved = true;
+                    clearInterval(puzzleTimerInterval);
+                    fireConfetti(true);
+                    showToast(`Hore! Puzzle Level ${currentPuzzleLevel} Diselesaikan! 🎉`, "fa-solid fa-trophy", 5000);
+                }
+            }
+
+            renderPuzzleBoard(getActivePuzzleImage());
+        }
+
+        function checkPuzzleSolved() {
+            return puzzlePiecesState.every((val, idx) => val === idx);
+        }
+
+        document.querySelectorAll('.puzzle-level-selector .level-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                setupPuzzleLevel(this.getAttribute('data-level'));
+            });
+        });
+
+        const btnShuffle = document.getElementById('btn-shuffle-puzzle');
+        if (btnShuffle) {
+            btnShuffle.addEventListener('click', () => {
+                startPuzzleGame();
+                showToast("Puzzle diacak ulang!", "fa-solid fa-shuffle");
+            });
+        }
+
+        const previewBox = document.getElementById('puzzle-preview-box');
+        const btnTogglePreview = document.getElementById('btn-toggle-puzzle-preview');
+        if (btnTogglePreview) {
+            btnTogglePreview.addEventListener('click', function() {
+                if (!previewBox) return;
+                const isShowing = previewBox.style.display === 'block';
+                previewBox.style.display = isShowing ? 'none' : 'block';
+                this.innerHTML = isShowing ? '<i class="fa-solid fa-eye"></i> Lihat Foto' : '<i class="fa-solid fa-eye-slash"></i> Sembunyikan Foto';
+            });
+        }
+
+        const puzzleCustomUpload = document.getElementById('puzzle-custom-upload');
+        if (puzzleCustomUpload) {
+            puzzleCustomUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        customPuzzleImage = evt.target.result;
+                        showToast("Foto custom berhasil diunggah!", "fa-solid fa-circle-check");
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        const btnApplyBonus = document.getElementById('btn-apply-bonus-puzzle');
+        if (btnApplyBonus) {
+            btnApplyBonus.addEventListener('click', () => {
+                const countSelect = document.getElementById('puzzle-piece-count-select');
+                const count = countSelect ? parseInt(countSelect.value) : 15;
+                setPuzzleDimensionsFromCount(count);
+                startPuzzleGame();
+            });
+        }
+
+        // Initialize Puzzle
+        setupPuzzleLevel(1);
+
+        const canvasGame = document.getElementById('game-canvas');
+        const ctxGame = canvasGame ? canvasGame.getContext('2d') : null;
+        let gameScore = 0, gameLives = 3, isGameRunning = false;
+        let gameAnimationId, spawnTimeout;
+        let player = { x: 0, y: 0, width: 60, height: 40 };
+        let items = [];
+
+        function resizeGame() {
+            if (!canvasGame || !canvasGame.parentElement) return;
+            const container = canvasGame.parentElement;
+            canvasGame.width = container.clientWidth;
+            canvasGame.height = 360;
+            player.y = canvasGame.height - 50;
+            if(!isGameRunning && gameScore === 0) {
+                 player.x = canvasGame.width / 2 - player.width/2;
+                 drawGame();
+            }
+        }
+        window.addEventListener('resize', resizeGame);
+
+        function movePlayer(clientX) {
+            if (!canvasGame) return;
+            const rect = canvasGame.getBoundingClientRect();
+            const scaleX = canvasGame.width / rect.width;
+            let x = (clientX - rect.left) * scaleX - (player.width / 2);
+            if(x < 0) x = 0;
+            if(x > canvasGame.width - player.width) x = canvasGame.width - player.width;
+            player.x = x;
+        }
+
+        if (canvasGame) {
+            canvasGame.addEventListener('mousemove', (e) => movePlayer(e.clientX));
+            canvasGame.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                movePlayer(e.touches[0].clientX);
+            }, {passive: false});
+        }
+
+        function spawnItem() {
+            if(!isGameRunning || !canvasGame) return;
+            const types = ['heart', 'heart', 'heart', 'bomb', 'trap'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const size = 28;
+            items.push({
+                x: Math.random() * (canvasGame.width - size),
+                y: -30,
+                type: type,
+                speed: Math.random() * 2 + 2 + (gameScore * 0.05),
+                size: size
+            });
+            let spawnRate = Math.max(400, 1400 - (gameScore * 18));
+            spawnTimeout = setTimeout(spawnItem, spawnRate);
+        }
+
+        function updateGame() {
+            if(!isGameRunning || !canvasGame) return;
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.y += item.speed;
+
+                if (item.y + item.size > player.y && 
+                    item.y < player.y + player.height && 
+                    item.x + item.size > player.x && 
+                    item.x < player.x + player.width) {
+                    
+                    if (item.type === 'heart') {
+                        gameScore++;
+                        const sEl = document.getElementById('game-score');
+                        if (sEl) sEl.innerText = gameScore;
+                    } else {
+                        gameLives--;
+                        updateLivesDisplay();
+                        showToast("Aww! Kena " + (item.type === 'bomb' ? "Bom!" : "Jebakan!"), "fa-solid fa-triangle-exclamation");
+                        if(gameLives <= 0) endGame();
+                    }
+                    items.splice(i, 1);
+                } else if (item.y > canvasGame.height) {
+                    items.splice(i, 1);
+                }
+            }
+        }
+
+        function drawGame() {
+            if (!ctxGame || !canvasGame) return;
+            ctxGame.clearRect(0, 0, canvasGame.width, canvasGame.height);
+            ctxGame.font = "36px Arial";
+            ctxGame.textAlign = "center";
+            ctxGame.textBaseline = "top";
+            ctxGame.fillText("🧺", player.x + player.width/2, player.y);
+
+            items.forEach(item => {
+                ctxGame.font = "26px Arial";
+                let emoji = item.type === 'heart' ? '❤️' : (item.type === 'bomb' ? '💣' : '🕸️');
+                ctxGame.fillText(emoji, item.x + item.size/2, item.y);
+            });
+        }
+
+        function gameLoop() {
+            updateGame();
+            drawGame();
+            if(isGameRunning) gameAnimationId = requestAnimationFrame(gameLoop);
+        }
+
+        function updateLivesDisplay() {
+            let hearts = "";
+            for(let i=0; i<gameLives; i++) hearts += "❤️";
+            const lEl = document.getElementById('game-lives');
+            if (lEl) lEl.innerText = hearts || "💀";
+        }
+
+        function startGame() {
+            resizeGame();
+            gameScore = 0; gameLives = 3; items = []; isGameRunning = true;
+            const sEl = document.getElementById('game-score');
+            if (sEl) sEl.innerText = gameScore;
+            updateLivesDisplay();
+            const startOverlay = document.getElementById('game-start-overlay');
+            if (startOverlay) startOverlay.classList.add('hidden');
+            const overOverlay = document.getElementById('game-over-overlay');
+            if (overOverlay) overOverlay.classList.add('hidden');
+            clearTimeout(spawnTimeout);
+            cancelAnimationFrame(gameAnimationId);
+            gameLoop();
+            spawnTimeout = setTimeout(spawnItem, 1000);
+        }
+
+        function endGame() {
+            isGameRunning = false;
+            cancelAnimationFrame(gameAnimationId);
+            clearTimeout(spawnTimeout);
+            const finalScoreEl = document.getElementById('final-score');
+            if (finalScoreEl) finalScoreEl.innerText = gameScore;
+            const overOverlay = document.getElementById('game-over-overlay');
+            if (overOverlay) overOverlay.classList.remove('hidden');
+            if(gameScore > 8) fireConfetti();
+        }
+
+        const startBtn = document.getElementById('start-game-btn');
+        if (startBtn) startBtn.addEventListener('click', startGame);
+        const restartBtn = document.getElementById('restart-game-btn');
+        if (restartBtn) restartBtn.addEventListener('click', startGame);
+
+        const colors = ['#ffeb3b', '#ff9a9e', '#a1c4fd', '#c2e9fb', '#fbc2eb'];
+        const postWishBtn = document.getElementById('post-wish-btn');
+        if (postWishBtn) {
+            postWishBtn.addEventListener('click', () => {
+                const input = document.getElementById('wish-input');
+                const text = input ? input.value.trim() : '';
+                if(!text) return showToast("Harapannya diisi dulu ya!", "fa-solid fa-pen");
+                
+                const wall = document.getElementById('wall-grid');
+                const note = document.createElement('div');
+                const bg = colors[Math.floor(Math.random() * colors.length)];
+                const rotate = (Math.random() * 6 - 3).toFixed(1);
+                
+                note.className = 'sticky-note animate-up';
+                note.style.background = bg;
+                note.style.transform = `rotate(${rotate}deg)`;
+                note.innerHTML = `<div>"${text}"</div><div class="note-author">- ${userName || "Tamu"}</div>`;
+                
+                if (wall) wall.prepend(note);
+                setTimeout(() => note.classList.add('in-view'), 50);
+                if (input) input.value = '';
+                showToast("Harapan berhasil ditempel di dinding!", "fa-solid fa-check");
+                fireConfetti();
+            });
+        }
+    </script>
+</body>
+</html>
